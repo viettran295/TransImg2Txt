@@ -1,13 +1,17 @@
 import easyocr 
 import csv 
+import os 
 import re
 
 def WriteCsv(filename: str, trans: list[str]):
     """
     Write list of string to csv file
     """
-    trans.insert(0, ["Date", "State", "Symbol", "Amount", "Price value"])
-    with open(filename, 'w') as file:
+    col_name = ["Date", "State", "Symbol", "Amount", "Price value"]
+    if not os.path.isfile(filename):
+        trans.insert(0, col_name) 
+
+    with open(filename, 'a') as file:
         writer = csv.writer(file)
         writer.writerows(trans)
     
@@ -32,7 +36,8 @@ def TransImg2Txt(imgPath: str) -> list[list[str]]:
     return txt
 
 if __name__ == "__main__":
-    imgPath = './img/mstr2.png'
-    trans = TransImg2Txt(imgPath)
-    print(trans)
-    WriteCsv('transaction.csv', trans)
+    imgPaths = ['./img/amd.png', './img/amzn.png', './img/coinb1.png', './img/coinb2.png', './img/meta1.png',
+                './img/meta2.png', './img/mstr1.png', './img/mstr2.png', './img/nvda.png',]
+    for img in imgPaths:
+        trans = TransImg2Txt(img)
+        WriteCsv('transaction.csv', trans)
