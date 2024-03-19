@@ -2,6 +2,7 @@ import easyocr
 import csv 
 import os 
 import re
+from utils import stringUtils
 
 def WriteCsv(filename: str, trans: list[str]):
     """
@@ -36,8 +37,15 @@ def TransImg2Txt(imgPath: str) -> list[list[str]]:
     return txt
 
 if __name__ == "__main__":
-    imgPaths = ['./img/amd.png', './img/amzn.png', './img/coinb1.png', './img/coinb2.png', './img/meta1.png',
-                './img/meta2.png', './img/mstr1.png', './img/mstr2.png', './img/nvda.png',]
-    for img in imgPaths:
-        trans = TransImg2Txt(img)
-        WriteCsv('transaction.csv', trans)
+    AMD = ['./img/amd.png']
+    AMZN = ['./img/amzn.png']
+    COIN = ['./img/coinb1.png', './img/coinb2.png']
+    META = ['./img/meta1.png', './img/meta2.png']
+    MSTR = ['./img/mstr1.png', './img/mstr2.png']
+    NVDA = ['./img/nvda.png']
+    imgStock = [AMD, AMZN, COIN, META, MSTR, NVDA]
+    for stock in imgStock:
+        for imgPath in stock: 
+            trans = TransImg2Txt(imgPath)
+            imgName = stringUtils.extract_name(imgPath)
+            WriteCsv(f'./transactions/{imgName}.csv', trans)
