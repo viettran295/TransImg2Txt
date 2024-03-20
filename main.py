@@ -8,7 +8,7 @@ def WriteCsv(filename: str, trans: list[str]):
     """
     Write list of string to csv file
     """
-    col_name = ["Date", "State", "Symbol", "Amount", "Price value"]
+    col_name = ["Date", "State", "Symbol", "Amount", "Price_value"]
     if not os.path.isfile(filename):
         trans.insert(0, col_name) 
 
