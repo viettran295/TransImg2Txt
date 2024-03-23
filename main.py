@@ -2,7 +2,7 @@ import easyocr
 import csv 
 import os 
 import re
-from utils import stringUtils
+from utils import string_utils
 
 def WriteCsv(filename: str, trans: list[str]):
     """
@@ -47,5 +47,5 @@ if __name__ == "__main__":
     for stock in imgStock:
         for imgPath in stock: 
             trans = TransImg2Txt(imgPath)
-            imgName = stringUtils.extract_name(imgPath)
+            imgName = string_utils.extract_name(imgPath)
             WriteCsv(f'./transactions/{imgName}.csv', trans)
