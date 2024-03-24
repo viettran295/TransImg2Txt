@@ -24,12 +24,20 @@ def str_to_number(df: pl.DataFrame, cols: str, type: pl.DataType) -> pl.DataFram
     """
     try:
         # Extract numbers by regex
-        df = df.with_columns(pl.col(cols).str.extract_all(r"\d+([\.]\d+)?*([\,]\d+)?").explode())
+        df = df.with_columns(
+                    pl.col(cols).str.extract_all(r"\d+([\.]\d+)?*([\,]\d+)?").explode()
+                    )
         # Replace ',' to '.' or '.' to ''
-        df = df.with_columns(pl.col(cols).str.replace(r"\.", ""))
-        df = df.with_columns(pl.col(cols).str.replace(r"\,", "."))
+        df = df.with_columns(
+                    pl.col(cols).str.replace(r"\.", "")
+                    )
+        df = df.with_columns(
+                    pl.col(cols).str.replace(r"\,", ".")
+                    )
         # Cast string to float64
-        df = df.with_columns(pl.col(cols).cast(type))
+        df = df.with_columns(
+                    pl.col(cols).cast(type)
+                    )
     except Exception as ex:
         logger.error(f"Error while converting -> {ex}")
 
