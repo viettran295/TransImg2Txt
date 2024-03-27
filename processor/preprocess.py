@@ -1,5 +1,6 @@
 import polars as pl 
 from utils.error_handler import logger
+import yfinance as yf
 
 def concate_df(dfs: list[pl.DataFrame]) -> pl.DataFrame:
     """
@@ -46,3 +47,13 @@ def profit_and_loss(df: pl.DataFrame) -> pl.DataFrame:
     else:
         logger.exception("Error while operating function sum --> Column does not exist")
     return df
+
+def add_market_price(df: pl.DataFrame, ticker: str) -> pl.DataFrame:
+    """
+    Add current market price to Dataframe
+    """
+    ticker = ticker.upper()
+    price = yf.Ticker(ticker).info['dayHigh']
+    return df.with_columns(
+                    pl.lit(price).alias("Market_Price")
+                )
