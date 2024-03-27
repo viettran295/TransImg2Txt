@@ -43,4 +43,6 @@ def profit_and_loss(df: pl.DataFrame) -> pl.DataFrame:
                     ((pl.col("Avg_Price_Sell") - pl.col("Avg_Price_Buy")) / pl.col("Avg_Price_Buy") * 100)
                     .alias("Profit%")
                     )
+    else:
+        logger.exception("Error while operating function sum --> Column does not exist")
     return df
