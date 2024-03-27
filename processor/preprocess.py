@@ -29,9 +29,13 @@ def sum_w_condition(df: pl.DataFrame, sum_col: str, state="Kauf") -> pl.DataFram
 
 def profit_and_loss(df: pl.DataFrame) -> pl.DataFrame:
     """
-    Calculate profit and loss 
+    Calculate :
+        - Average buying and selling price
+        - Profit and loss in %
+        - Current profit and loss in % when compare with curren market price
     """
-    if "Sum_Price_Kauf" in df.columns and "Sum_Amount_Verkauf" in df.columns:
+    if "Sum_Price_Kauf" in df.columns and "Sum_Amount_Verkauf" in df.columns \
+        and "Market_Price" in df.columns:
         df = df.with_columns(
                     (pl.col("Sum_Price_Kauf") / pl.col("Sum_Amount_Kauf"))
                     .alias("Avg_Price_Buy")
@@ -43,6 +47,10 @@ def profit_and_loss(df: pl.DataFrame) -> pl.DataFrame:
         df = df.with_columns(
                     ((pl.col("Avg_Price_Sell") - pl.col("Avg_Price_Buy")) / pl.col("Avg_Price_Buy") * 100)
                     .alias("Profit%")
+                    )
+        df = df.with_columns(
+                    ((pl.col("Market_Price") - pl.col("Avg_Price_Buy")) / pl.col("Avg_Price_Buy") * 100)
+                    .alias("Current_Profit%")
                     )
     else:
         logger.exception("Error while operating function sum --> Column does not exist")
