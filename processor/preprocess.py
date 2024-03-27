@@ -14,12 +14,15 @@ def sum_w_condition(df: pl.DataFrame, sum_col: str, state="Kauf") -> pl.DataFram
     """
     Sum vertically with the condition: "State" is equal to "Kauf" or "Verkauf"
     """
-    tmp = df.select(
-                pl.col(sum_col).filter(pl.col("State") == state).sum()
-                )
-    df = df.with_columns(
-                pl.lit(tmp).alias(f"Sum_{sum_col}_{state}")
-                )
+    if "State" in df.columns:
+        tmp = df.select(
+                    pl.col(sum_col).filter(pl.col("State") == state).sum()
+                    )
+        df = df.with_columns(
+                    pl.lit(tmp).alias(f"Sum_{sum_col}_{state}")
+                    )
+    else: 
+        logger.exception("Error while operating function sum --> Column does not exist")
 
     return df
 
